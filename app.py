@@ -4,6 +4,7 @@ from flask import render_template
 from werkzeug.utils import secure_filename
 from models.PhiNet import *
 import os
+import socket
 app = Flask(__name__)
 api = Api(app)
 Users = {}
@@ -45,7 +46,10 @@ def check():
 
 
 if __name__ == '__main__':
-    host = os.popen("hostname -I").read().split(" ")[0]
+    if os.name=='nt':
+        host = socket.gethostbyname(socket.gethostname())
+    else:
+        host = os.popen("hostname -I").read().split(" ")[0]
     PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net']
     os.system("clear")
     print(" * Model has been imported....")
